@@ -4,9 +4,6 @@
 #bets every game to win or loose some stake. Being a Calculative
 #Gambler exits if the Stake reaches a high or a low limit
 
-
-
-everyGameBet=1
 #CONSTANTS
 IS_WIN=1
 IS_LOOSE=0
@@ -16,14 +13,16 @@ IS_RESIGN=0
 #VARIABLES
 randomNumber=0
 totalStakeDay=0
+everyGameBet=1
 
 function play()
 {
+for (( index=1; index<=$1; index++ ))
+do
 halfStake=$(( $STAKE / 2 ))
 winLimit=$(( ( $STAKE + $halfStake ) - $STAKE ))
 looseLimit=$(( ( $STAKE - $halfStake ) - $STAKE ))
-
-echo $winLimit $looseLimit
+resultDay=0
 
 while [ $IS_RESIGN == 0 ]
 do
@@ -40,7 +39,8 @@ do
             IS_RESIGN=1
       fi
 done
-  echo $totalStakeDay
+   echo 
+done
 }
 
-printf "$( play )"
+printf "$( play 20)"
