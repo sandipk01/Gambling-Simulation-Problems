@@ -6,25 +6,41 @@
 
 
 
+everyGameBet=1
 #CONSTANTS
 IS_WIN=1
 IS_LOOSE=0
 STAKE=100
+IS_RESIGN=0
 
 #VARIABLES
-everyDayStake=100
-everyGameBet=1
 randomNumber=0
+totalStakeDay=0
 
-randomNumber=$(( RANDOM % 2 ))
+function play()
+{
+halfStake=$(( $STAKE / 2 ))
+winLimit=$(( ( $STAKE + $halfStake ) - $STAKE ))
+looseLimit=$(( ( $STAKE - $halfStake ) - $STAKE ))
 
-if [ $randomNumber -eq $IS_WIN  ]
-	then
-		printf "win: $everyGameBet\n"
-		everyDayStake=$(( $everyDayStake + $everyGameBet ))
-	else
-		everyDayStake=$(( $everyDayStake - $everyGameBet ))
-		printf "loose:$everyGameBet\n"
-fi
+echo $winLimit $looseLimit
 
-printf "Total Money: $everyDayStake\n"
+while [ $IS_RESIGN == 0 ]
+do
+   randomNumber=$(( RANDOM % 2 ))
+   if [ $randomNumber -eq $IS_WIN  ]
+      then
+         totalStakeDay=$(( $totalStakeDay + $everyGameBet ))
+      else
+         totalStakeDay=$(( $totalStakeDay - $everyGameBet ))
+   fi
+      if [ $totalStakeDay -ge $winLimit -o $totalStakeDay -le $looseLimit ]
+         then
+            printf "Resign for the day\n"
+            IS_RESIGN=1
+      fi
+done
+  echo $totalStakeDay
+}
+
+printf "$( play )"
