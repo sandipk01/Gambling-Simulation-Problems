@@ -9,26 +9,45 @@ IS_WIN=1
 IS_LOOSE=0
 STAKE=100
 IS_RESIGN=0
-declare -A array
+declare -A dailyStake
 #VARIABLES
+declare -a dailyWin
 everyGameBet=1
-
 halfStake=$(( $STAKE / 2 ))
 winLimit=$(( ( $STAKE + $halfStake ) - $STAKE ))
 looseLimit=$(( ( $STAKE - $halfStake ) - $STAKE ))
 totalStakeDay=0
+MonthWinorLoose=0
 
-for (( index=1; index<=20; index++ ))
+
+function play()
+{
+for (( index=1; index<=$1; index++ ))
 do
+	randomNumber=$(( RANDOM%2 ))
+	if [ $randomNumber -eq $IS_WIN ]
+		then
+			totalStakeDay=$winLimit
+			result="winning"
+		else
+			totalStakeDay=$looseLimit
+			result="loosing"
+		fi
+		MonthWinorLoose=$(( $MonthWinorLoose + $totalStakeDay ))
+		echo $index "day: "  $totalStakeDay "$result | total: $MonthWinorLoose"
+		dailyStake[$index]=$MonthWinorLoose
+	done
+}
 
-randomNumber=$(( RANDOM%2 ))
-if [ $randomNumber -eq $IS_WIN ]
-	then
-		totalStakeDay=$winLimit
-		result="winning"
-	else
-		totalStakeDay=$looseLimit
-		result="loosing"
-fi
-echo $index "day: "  $totalStakeDay "$result"
+
+function show(){
+for (( index=1; index<=${#dailyStake[@]}; index++ ))
+do
+	echo  $index "---" "${dailyStake["$index"]}"
 done
+
+}
+
+#arg 1-days 
+play 20
+show
