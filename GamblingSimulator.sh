@@ -24,6 +24,7 @@ function play()
 {
 for (( index1=1; index1<=$2; index1++ ))
 do
+	MonthWinorLoose=0
 	echo  $index1 "months"
 	for (( index=1; index<=$1; index++ ))
 	do
@@ -41,9 +42,43 @@ do
 		dailyStake[$index]=$MonthWinorLoose
 	done
 show
+findLuckieDay
+findUnluckieDay
 done
 }
 
+function findLuckieDay()
+{
+local max=0
+local day=1
+for (( index=1; index<=${#dailyStake[@]}; index++ ))
+do
+   if [ "${dailyStake["$index"]}" -gt $max ]
+		then
+			day=$index
+			max="${dailyStake["$index"]}"
+	fi
+done
+echo "luckie day" $day "--" $max
+}
+
+function findUnluckieDay()
+{
+local min=${dailyStake[1]}
+local day=1
+for (( index=1; index<=${#dailyStake[@]}; index++ ))
+do
+   if [ "${dailyStake["$index"]}" -le 0 ]
+      then
+         if [ "${dailyStake["$index"]}" -lt $min ]
+   			then
+					day=$index
+					min="${dailyStake["$index"]}"
+			fi
+	fi
+done
+echo "unluckie day" $day "--" $min
+}
 
 function show(){
 for (( index=1; index<=${#dailyStake[@]}; index++ ))
