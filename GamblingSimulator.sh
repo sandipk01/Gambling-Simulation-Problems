@@ -22,21 +22,26 @@ MonthWinorLoose=0
 
 function play()
 {
-for (( index=1; index<=$1; index++ ))
+for (( index1=1; index1<=$2; index1++ ))
 do
-	randomNumber=$(( RANDOM%2 ))
-	if [ $randomNumber -eq $IS_WIN ]
-		then
-			totalStakeDay=$winLimit
-			result="winning"
-		else
-			totalStakeDay=$looseLimit
-			result="loosing"
+	echo  $index1 "months"
+	for (( index=1; index<=$1; index++ ))
+	do
+		randomNumber=$(( RANDOM%2 ))
+		if [ $randomNumber -eq $IS_WIN ]
+			then
+				totalStakeDay=$winLimit
+				result="winning"
+			else
+				totalStakeDay=$looseLimit
+				result="loosing"
 		fi
 		MonthWinorLoose=$(( $MonthWinorLoose + $totalStakeDay ))
 		echo $index "day: "  $totalStakeDay "$result | total: $MonthWinorLoose"
 		dailyStake[$index]=$MonthWinorLoose
 	done
+show
+done
 }
 
 
@@ -48,6 +53,6 @@ done
 
 }
 
-#arg 1-days 
-play 20
-show
+#arg 1-days 2-months
+play 20 3
+
